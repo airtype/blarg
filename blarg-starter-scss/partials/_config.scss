@@ -1,0 +1,14 @@
+/*
+ * Load the Blarg core by defining a path to the core.
+ *
+ * Include this file at the top of any SCSS template that should utilize Blarg.
+ */
+
+@import "../../base";
+
+/*
+ * Import project partials
+ */
+
+@import "_fonts";
+@import "_normalize";
