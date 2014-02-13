@@ -1,0 +1,25 @@
+{
+  "name": "blarg",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wesrice/blarg",
+  "authors": [
+    "Airtype Studio",
+    "Wes Rice",
+    "Shane Howell"
+  ],
+  "description": "Simple SCSS Framework",
+  "keywords": [
+    "SCSS",
+    "Grid",
+    "System",
+    "Airtype"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
