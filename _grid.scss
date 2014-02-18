@@ -28,13 +28,17 @@
 	// Else output EM.
 	@function cols($cols:1) {
 
-		@if $use-rems == true {
+		@if $use-rem == true {
 
 			@return ($cols * ($column + $gutter) - $gutter) / $rem - .03rem;
 
-		} @else if $use-rems == false {
+		} @else if $use-em == true {
 
 			@return ($cols * ($column + $gutter) - $gutter) / $em - .03em;
+
+		} @else if $use-px == true {
+
+			@return ($cols * ($column + $gutter) - $gutter) / $px - .03px;
 
 		}
 
@@ -43,16 +47,16 @@
 
 
 	// Offset function, same method as cols.
-	@function offset($offset:1) {
+	// @function offset($offset:1) {
 
-		@if $use-rems == true {
+	// 	@if $use-rems == true {
 
-			@return ($offset * ($column + $gutter)) / $rem - .03rem;
+	// 		@return ($offset * ($column + $gutter)) / $rem - .03rem;
 
-		} @else if $use-rems == false {
+	// 	} @else if $use-rems == false {
 
-			@return ($offset * ($column + $gutter)) / $em - .03em;
+	// 		@return ($offset * ($column + $gutter)) / $em - .03em;
 
-		}
+	// 	}
 
-	}
+	// }
