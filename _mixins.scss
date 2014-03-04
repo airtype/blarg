@@ -143,7 +143,7 @@
 	      -moz-opacity: $opacity;
 	    	   opacity: $opacity;
 	    	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + ($opacity * 100) + ")";
-	    		filter: alpha(opacity=($opacity * 100));
+	    		filter: unquote("alpha(opacity=#{$opacity * 100})");
 	}
 
 
