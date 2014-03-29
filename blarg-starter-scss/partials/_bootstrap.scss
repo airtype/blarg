@@ -1,0 +1,13 @@
+/**
+ * @file            _bootstrap.scss
+ * @compiles-to     n/a
+ * @imports-to      Layout files
+ * @author          Shane Howell <@shane_howell>
+ * @author          Wes Rice <@wesrice>
+ *
+ * Load the Blarg core by defining a path to the core.
+ *
+ * Include this file at the top of any SCSS template that should utilize Blarg. 
+ */
+
+@import "path/to/blarg";

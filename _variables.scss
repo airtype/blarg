@@ -1,28 +1,24 @@
-/*******************************************************
-
-	Blarg Front-End SCSS Framework by @Shane_Howell
-
-  -------------------
-
-	Import - Does not directly compile.
-	@import > ../config.scss
-
-********************************************************/
-
+/**
+ * @file            _variables.scss
+ * @compiles-to     n/a
+ * @imports-to      _blarg.scss
+ * @author          Shane Howell <@shane_howell>
+ * @author          Wes Rice <@wesrice>
+ */
 
 
 /********************
  ** Grid Variables **
  ********************/
 
-	$base-font-size: 16px; 				// Your base font-size in pixels
-	$column: 60px;						// The column-width of your grid in pixels
-	$gutter: 20px;						// The gutter-width of your grid in pixels
+    $base-font-size: 16px;              // Your base font-size in pixels
+    $column: 60px;                      // The column-width of your grid in pixels
+    $gutter: 20px;                      // The gutter-width of your grid in pixels
 
-	// Pick your poisen.
-	$use-px: false;
-	$use-em: false;
-	$use-rem: true;					// REMs don't support IE8 and below by default, use a polyfill if support is needed or use EM or PX
+    // Pick your poisen.
+    $use-px: false;
+    $use-em: false;
+    $use-rem: true;                 // REMs don't support IE8 and below by default, use a polyfill if support is needed or use EM or PX
 
 
 
@@ -30,26 +26,26 @@
  ** Misc Variables **
  ********************/
 
-	$px: $base-font-size / 1px;		// Shorthand for outputting PXs - don't remove or you'll have a bad time
-	$em: $base-font-size / 1em;		// Shorthand for outputting EMs - don't remove or you'll have a bad time
-	$rem: $base-font-size / 1rem;	// Shorthand for outputting REMs - don't remove or you'll have a bad time
+    $px: $base-font-size / 1px;     // Shorthand for outputting PXs - don't remove or you'll have a bad time
+    $em: $base-font-size / 1em;     // Shorthand for outputting EMs - don't remove or you'll have a bad time
+    $rem: $base-font-size / 1rem;   // Shorthand for outputting REMs - don't remove or you'll have a bad time
 
 
-	// Used to add gutter via margin when inline-block is set. Since inline-block adds margin...
-	// Does the same as the grid, uses REMs or EMs respectively.
-	@if $use-rem == true {
+    // Used to add gutter via margin when inline-block is set. Since inline-block adds margin...
+    // Does the same as the grid, uses REMs or EMs respectively.
+    @if $use-rem == true {
 
-		$col-gut: ($gutter - 4px) / $rem;
+        $col-gut: ($gutter - 4px) / $rem;
 
-	} @else if $use-em == true {
+    } @else if $use-em == true {
 
-		$col-gut: ($gutter - 4px) / $em;
+        $col-gut: ($gutter - 4px) / $em;
 
-	} @else if $use-px == true {
+    } @else if $use-px == true {
 
-		$col-gut: ($gutter - 4px) / $px;
+        $col-gut: ($gutter - 4px) / $px;
 
-	}
+    }
 
 
 
@@ -58,11 +54,11 @@
  ** Media Query Variables **
  ***************************/
 
-	$smallest:  "screen";  											// Phone Portrait - Default
-	$small: 	"screen and (min-width: 480px)";					// Phone Landscape
-	$medium: 	"screen and (min-width: 720px)";					// Tablet Portrait
-	$large: 	"screen and (min-width: 960px)";					// Desktop Regular
-	$largest:   "screen and (min-width: 1200px)";					// Desktop Large
-	$retina: 	"screen and (-webkit-min-device-pixel-ratio: 1.5),
-		      	 screen and (min--moz-device-pixel-ratio: 1.5),
-		      	 screen and (min-device-pixel-ratio: 1.5)";			// Retina Screens
+    $smallest:  "screen";                                           // Phone Portrait - Default
+    $small:     "screen and (min-width: 480px)";                    // Phone Landscape
+    $medium:    "screen and (min-width: 720px)";                    // Tablet Portrait
+    $large:     "screen and (min-width: 960px)";                    // Desktop Regular
+    $largest:   "screen and (min-width: 1200px)";                   // Desktop Large
+    $retina:    "screen and (-webkit-min-device-pixel-ratio: 1.5),
+                 screen and (min--moz-device-pixel-ratio: 1.5),
+                 screen and (min-device-pixel-ratio: 1.5)";         // Retina Screens

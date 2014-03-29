@@ -1,6 +1,6 @@
 /**
- * @file            modules/header.scss
- * @compiles-to     modules/header.css
+ * @file            layouts/base.scss
+ * @compiles-to     layouts/base.css
  * @author          Shane Howell <@shane_howell>
  * @author          Wes Rice <@wesrice>
  */
@@ -10,6 +10,8 @@
  *************/
 
     @import "../partials/bootstrap";
+    @import "../partials/fonts";
+    @import "../partials/normalize";
 
 
 /***********************************************
