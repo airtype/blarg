@@ -26,7 +26,7 @@
  ** Media query checks for CSS3 support. Has touch support. **
  *************************************************************/
 
-    @media #{$smallest} {
+    @media #{$mq-smallest} {
 
 
 
@@ -39,7 +39,7 @@
  ** Has touch support                                 **
  *******************************************************/
 
-    @media #{$small} {
+    @media #{$mq-small} {
 
 
 
@@ -52,7 +52,7 @@
  ** Has touch support.                                      **
  *************************************************************/
 
-    @media #{$medium} {
+    @media #{$mq-medium} {
 
 
 
@@ -65,7 +65,7 @@
  ** Has touch support.                                     **
  ************************************************************/
 
-    @media #{$large} {
+    @media #{$mq-large} {
 
 
 
@@ -78,7 +78,7 @@
  ** Has touch support.                       **
  **********************************************/
 
-    @media #{$largest} {
+    @media #{$mq-largest} {
 
 
 
@@ -90,7 +90,7 @@
  ** Inherits nothing.                             **
  ***************************************************/
 
-    @media #{$retina} {
+    @media #{$mq-retina} {
 
 
 
