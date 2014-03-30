@@ -10,6 +10,18 @@
  * Licensed under CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
  */
 
+/********************
+ ** Grid Variables **
+ ********************/
+
+    $base-font-size: 16px;                  // Your base font-size in pixels
+    $grid-column: 60px;                     // The column-width of your grid in pixels
+    $grid-gutter: 20px;                     // The gutter-width of your grid in pixels
+
+    // Pick your poison.
+    // REMs don't support IE8 and below by default, use a polyfill if support is needed or use EM or PX
+    $grid-default-unit: 'rem' !default;     // 'rem', 'em' or 'px'
+
 /******************************************************
  ** Columns                                          **
  ** Auto calculates the width based on number value. **
@@ -19,25 +31,25 @@
     // Set $column and $gutter values in the _variables.scss file.
     // If the $use-rems value is true, then output REM.
     // Else output EM.
-    @function cols($cols:1) {
+    @function cols($cols:1, $unit:false) {
 
-        @if $use-rem == true {
+        $unit: if( $unit != false, $unit, $grid-default-unit);
 
-            @return ($cols * ($column + $gutter) - $gutter) / $rem - .03rem;
+        @if $unit == 'rem' {
 
-        } @else if $use-em == true {
+            @return ($cols * ($grid-column + $grid-gutter) - $grid-gutter) / $rem - .03rem;
 
-            @return ($cols * ($column + $gutter) - $gutter) / $em - .03em;
+        } @else if $unit == 'em' {
 
-        } @else if $use-px == true {
+            @return ($cols * ($grid-column + $grid-gutter) - $grid-gutter) / $em - .03em;
 
-            @return ($cols * ($column + $gutter) - $gutter) / $px - .03px;
+        } @else if $unit == 'px' {
+
+            @return ($cols * ($grid-column + $grid-gutter) - $grid-gutter);
 
         }
 
     }
-
-
 
     // Offset function, same method as cols.
     // @function offset($offset:1) {
@@ -53,3 +65,24 @@
     //  }
 
     // }
+
+    $px: $base-font-size / 1px;     // Shorthand for outputting PXs - don't remove or you'll have a bad time
+    $em: $base-font-size / 1em;     // Shorthand for outputting EMs - don't remove or you'll have a bad time
+    $rem: $base-font-size / 1rem;   // Shorthand for outputting REMs - don't remove or you'll have a bad time
+
+
+    // Used to add gutter via margin when inline-block is set. Since inline-block adds margin...
+    // Does the same as the grid, uses REMs or EMs respectively.
+    @if $grid-default-unit == 'rem' {
+
+        $col-gut: ($grid-gutter - 4px) / $rem;
+
+    } @else if $grid-default-unit == 'em' {
+
+        $col-gut: ($grid-gutter - 4px) / $em;
+
+    } @else if $grid-default-unit == 'px' {
+
+        $col-gut: ($grid-gutter - 4px) / $px;
+
+    }
