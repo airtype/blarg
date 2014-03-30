@@ -22,6 +22,6 @@
  ** Partials **
  **************/
 
-    @import "mixins";       // SCSS Mixins
-    @import "variables";    // SCSS Variables
-    @import "grid";         // Base Grid
+    @import "mixins";
+    @import "media-queries";
+    @import "grid";
