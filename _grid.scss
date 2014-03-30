@@ -52,19 +52,25 @@
     }
 
     // Offset function, same method as cols.
-    // @function offset($offset:1) {
+    @function offset($offset:1, $unit:false) {
 
-    //  @if $use-rems == true {
+        $unit: if( $unit != false, $unit, $grid-default-unit);
 
-    //      @return ($offset * ($column + $gutter)) / $rem - .03rem;
+        @if $unit == 'rem' {
 
-    //  } @else if $use-rems == false {
+            @return ($offset * ($grid-column + $grid-gutter)) / $rem - .03rem;
 
-    //      @return ($offset * ($column + $gutter)) / $em - .03em;
+        } @else if $unit == 'em' {
 
-    //  }
+            @return ($offset * ($grid-column + $grid-gutter)) / $em - .03em;
 
-    // }
+        } @else if $unit == 'px' {
+
+            @return ($offset * ($grid-column + $grid-gutter));
+
+        }
+
+    }
 
     $px: $base-font-size / 1px;     // Shorthand for outputting PXs - don't remove or you'll have a bad time
     $em: $base-font-size / 1em;     // Shorthand for outputting EMs - don't remove or you'll have a bad time
