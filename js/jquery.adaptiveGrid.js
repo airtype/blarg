@@ -33,8 +33,8 @@
     });
  });
  */
- 
-;(function ($) { 
+
+;(function ($) {
 
     $.adaptiveGrid = function (args) {
 
@@ -47,7 +47,7 @@
 
                 // Define API defaults
                 defaults = {
-
+                    devMode      : false,
                     align        : 'center', // The alignment of your layout. Accepts 'center' (default) or 'left'
                     columnColor  : 'black', // The background style of each column. Accepts any CSS background properties (using the shorthand syntax)
                     columnWidth  : 60, // The width of each column, in pixels
@@ -213,15 +213,15 @@
                     // Initialize what you do
                     var columns = '',
 
-                        // Set HTML options 
+                        // Set HTML options
                         spanOpen  = '<span class="',
                         spanClose = '"></span>',
                         html = {};
-                        
+
                         for (key in columnClassName) {
-                        
+
                         	html[key] = spanOpen + columnClassName[key] + spanClose;
-                        	
+
                         }
 
                     // Add left margin
@@ -432,7 +432,7 @@
 
                     // See http://rezitech.github.com/syze/ for documentation on syze()
                     syze.sizes(opts.sizes)
-                        .throttleRate(opts.throttleRate)
+                        .debounceRate(opts.throttleRate)
                         .callback(function (layoutWidth) {
 
                             if( cachedLayoutWidth != layoutWidth ){
@@ -441,51 +441,54 @@
                                 cachedLayoutWidth = layoutWidth;
 
                                 // Call the user defined syze callback
-                                opts.syzeCallback();
+                                opts.syzeCallback( layoutWidth );
 
-                                // Set overlay styles according to dimensions
-                                overlay.css({
-                                    'height'      : (overlayIsOpen) ? $('body').height() : '0%',
-                                    'left'        : (opts.align === 'left') ? 0 : '50%',
-                                    'margin-left' : (opts.align === 'left') ? 0 : (layoutWidth / -2),
-                                    'opacity'     : (overlayIsOpen) ? opts.opacity : 0,
-                                    'width'       : layoutWidth
-                                })
-                                    // Remove any current columns
-                                    .find('span')
-                                    .each(function () {
-                                        $(this).remove();
+                                // Only change columns if in dev mode
+                                if(opts.devMode) {
+
+                                    // Set overlay styles according to dimensions
+                                    overlay.css({
+                                        'height'      : (overlayIsOpen) ? $('body').height() : '0%',
+                                        'left'        : (opts.align === 'left') ? 0 : '50%',
+                                        'margin-left' : (opts.align === 'left') ? 0 : (layoutWidth / -2),
+                                        'opacity'     : (overlayIsOpen) ? opts.opacity : 0,
+                                        'width'       : layoutWidth
                                     })
-                                    .end()
-                                    // Generate new columns
-                                    .prepend(generateColumns(layoutWidth / (opts.columnWidth + opts.gutterWidth)));
+                                        // Remove any current columns
+                                        .find('span')
+                                        .each(function () {
+                                            $(this).remove();
+                                        })
+                                        .end()
+                                        // Generate new columns
+                                        .prepend(generateColumns(layoutWidth / (opts.columnWidth + opts.gutterWidth)));
 
-                                // Style the new columns
-                                setColumnStyles(overlay);
+                                    // Style the new columns
+                                    setColumnStyles(overlay);
 
-                                // If we're showing hints
-                                if (opts.hints === true) {
+                                    // If we're showing hints
+                                    if (opts.hints === true) {
 
-                                    // Define what our hint will say
-                                    var text = 'Grid width: ' + layoutWidth;
+                                        // Define what our hint will say
+                                        var text = 'Grid width: ' + layoutWidth;
 
-                                    // Update hint text
-                                    hint.text(text);
+                                        // Update hint text
+                                        hint.text(text);
 
-                                    // If the hint isn't on the page yet
-                                    if (!$('#' + namespace + 'hint').length) {
+                                        // If the hint isn't on the page yet
+                                        if (!$('#' + namespace + 'hint').length) {
 
-                                        // By all means add it
-                                        elem.prepend(hint);
+                                            // By all means add it
+                                            elem.prepend(hint);
+
+                                        }
 
                                     }
 
                                 }
 
-
                             }
 
-                            
                         });
 
                 }
@@ -495,14 +498,18 @@
             // Run shit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // ===============================================
 
-            // Confirm that each size is divisible by the sum of (opts.columnWidth + opts.gutterWidth)
-            checkMath(opts.sizes);
+            if( opts.devMode ) {
 
-            // Add the grid and button to the page
-            elem.prepend(overlay).append(createButtonColumns(button));
+                // Confirm that each size is divisible by the sum of (opts.columnWidth + opts.gutterWidth)
+                checkMath(opts.sizes);
 
-            // Listen for the esc key
-            escKeyPress();
+                // Add the grid and button to the page
+                elem.prepend(overlay).append(createButtonColumns(button));
+
+                // Listen for the esc key
+                escKeyPress();
+
+            }
 
             // Listen for and react to changes in width or height
             resize(elem);
@@ -535,47 +542,40 @@
 	_sizes = [],
 	_names = {},
 	_from = 'browser',
-	_throttleRate = 250,
+	_debounceRate = 50,
 	_callback;
 	// add window event
 	function addWinEvent(type, fn) {
 		if (win.addEventListener) addEventListener(type, fn, false); else attachEvent('on' + type, fn);
 	}
-	// throttler inspired by github.com/cowboy/jquery-throttle-debounce/
-	function throttle(fn) {
-		var timeout,
-		last_exec;
-		return function() {
-			var obj = this,
-			args = arguments, 
-			elapsed = +new Date() - last_exec;
-			function exec() {
-				last_exec = +new Date();
-				fn.apply (obj, args);
-			};
-			timeout && clearTimeout(timeout);
-			if (elapsed > _throttleRate) {
-				exec();
-			} else {
-				timeout = setTimeout(exec, _throttleRate - elapsed);
+	// debouncer
+	function debounce(fn) {
+		var timeout;
+		return function () {
+			var obj = this, args = arguments;
+			function delayed () {
+				fn.apply(obj, args);
+				timeout = null;
 			}
+			if (timeout) clearTimeout(timeout);
+			timeout = setTimeout(delayed, _debounceRate);
 		};
 	}
 	// resizer
 	function onResize() {
 		var
-		currentSize = 
+		currentSize =
 			/^device$/i.test(String(_from)) ? !win.orientation || orientation == 180 ? screen.width : screen.height
 			: /^browser$/i.test(String(_from)) ? docEl.clientWidth
 			: (_from instanceof String) ? Function('return ' + _from)()
 			: parseInt(_from, 10) || 0,
-		docElClassNames = docEl.className.replace(/^\s+|(^|\s)(gt|is|lt)[^\s]+|\s+$/g, '').split(/\s+/),
+		docElClassNames = docEl.className.replace(/^\s+/, ' ').replace(/\s(gt|is|lt)[^\s]+/g, '').replace(/^\s+/, '').split(/\s+/),
 		classNames = [], i = -1, e, arr = _sizes, len = arr.length;
 		//
 		arr.sort(function (a, b) { return(a - b); });
 		//
 		while (++i < len) if (currentSize < arr[i]) break;
-		currentSize = arr[Math.max(Math.min(--i, len - 1), 0)];
+		if (i > 0) currentSize = arr[Math.min(--i, len - 1)];
 		//
 		i = -1;
 		while (++i < len) {
@@ -591,11 +591,11 @@
 		sizes: function (val) { _sizes = [].concat.apply([], arguments); onResize(); return this; },
 		names: function (val) { if (val instanceof Object) { _names = val; onResize(); } return this; },
 		from: function (val) { _from = val; onResize(); return this; },
-		throttleRate: function (val) { _throttleRate = parseInt(val, 10) || 0; onResize(); return this; },
+		debounceRate: function (val) { _debounceRate = parseInt(val, 10) || 0; onResize(); return this; },
 		callback: function (val) { if (val instanceof Function) { _callback = val; onResize(); } return this; }
 	};
 	// start syze
-	addWinEvent('resize', throttle(onResize));
+	addWinEvent('resize', debounce(onResize));
 	addWinEvent('orientationchange', onResize);
 	onResize();
 }(this, document.documentElement));
