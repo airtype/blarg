@@ -1,54 +1,55 @@
 // Include gulp
-var gulp        = require('gulp'),
+var gulp         = require('gulp'),
 
-/*---------------------------------------------------------------------------------------------
+/*
  * Gulp plugins.
- ---------------------------------------------------------------------------------------------*/
-    gutil       = require('gulp-util'),
-    rename      = require('gulp-rename'),
-    notify      = require('gulp-notify'),
-    scss        = require('gulp-sass'),
-    //graph       = require('gulp-sass-graph'),
-    imagemin    = require('gulp-imagemin'),
-    watch       = require('gulp-watch'),
-    plumber     = require('gulp-plumber'),
-    jshint      = require('gulp-jshint'),
-    map         = require('map-stream'),
-    uglify      = require('gulp-uglify'),
-    livereload  = require('gulp-livereload'),
-    lr          = require('tiny-lr'),
-    server      = lr(),
-    path        = ''
+ */
+    gutil        = require('gulp-util'),
+    rename       = require('gulp-rename'),
+    notify       = require('gulp-notify'),
+    scss         = require('gulp-sass'),
+    // graph        = require('gulp-sass-graph'),
+    imagemin     = require('gulp-imagemin'),
+    watch        = require('gulp-watch'),
+    plumber      = require('gulp-plumber'),
+    jshint       = require('gulp-jshint'),
+    map          = require('map-stream'),
+    uglify       = require('gulp-uglify'),
+    livereload   = require('gulp-livereload'),
+    lr           = require('tiny-lr'),
+    server       = lr(),
+    srcPath      = '',
+    templatePath = '',
     //browserSync = require('browser-sync'),
     //concat   = require('gulp-concat'),
     ;
 
 
-/*---------------------------------------------------------------------------------------------
+/*
  * Input, Output paths and environment variables.
- ---------------------------------------------------------------------------------------------*/
+ */
     var input_paths = {
-        images:  [path + 'src/img/**/*.jpg', path + 'src/img/**/*.png', path + 'src/img/**/*.gif', '!images/min{,/**}'],
-        scripts: [path + 'src/js/**/*.js', '!scripts/min{,/**}'],
-        styles:  [path + 'src/scss/**/*.scss', '!' + path + 'src/scss/partials{,/**}']
+        images:  [srcPath + 'src/img/**/*.jpg', srcPath + 'src/img/**/*.png', srcPath + 'src/img/**/*.gif', '!images/min{,/**}'],
+        scripts: [srcPath + 'src/js/**/*.js', '!scripts/min{,/**}'],
+        styles:  [srcPath + 'src/scss/**/*.scss', '!' + srcPath + 'src/scss/partials{,/**}']
     }
 
     var output_paths = {
-        images:  path + 'dist/img',
-        scripts: path + 'dist/js',
-        styles:  path + 'dist/css'
+        images:  srcPath + 'dist/img',
+        scripts: srcPath + 'dist/js',
+        styles:  srcPath + 'dist/css'
     }
 
     var template_paths = {
-        html: ['**/*.html', '**/*.twig']
+        html: [ templatePath + '**/*.html', templatePath + '**/*.twig']
     }
 
     //var DEV_URL = 'dev.gulp.com';
 
 
-/*---------------------------------------------------------------------------------------------
+/*
  * Plugin options.
- ---------------------------------------------------------------------------------------------*/
+ */
 
     // Sass
     var scss_options = {
@@ -82,9 +83,9 @@ var gulp        = require('gulp'),
     });
 
 
-/*---------------------------------------------------------------------------------------------
+/*
  * Gulp Tasks.
- ---------------------------------------------------------------------------------------------*/
+ */
     gulp.task( 'styles', function() {
 
         // Compile and minify scss.
