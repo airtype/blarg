@@ -72,9 +72,9 @@
 
     }
 
-    $px: $base-font-size / 1px;     // Shorthand for outputting PXs - don't remove or you'll have a bad time
-    $em: $base-font-size / 1em;     // Shorthand for outputting EMs - don't remove or you'll have a bad time
-    $rem: $base-font-size / 1rem;   // Shorthand for outputting REMs - don't remove or you'll have a bad time
+    $px: $base-font-size / 1;     // Shorthand for outputting PXs - don't remove or you'll have a bad time
+    $em: $base-font-size / 1;     // Shorthand for outputting EMs - don't remove or you'll have a bad time
+    $rem: $base-font-size / 1;   // Shorthand for outputting REMs - don't remove or you'll have a bad time
 
 
     // Used to add gutter via margin when inline-block is set. Since inline-block adds margin...
