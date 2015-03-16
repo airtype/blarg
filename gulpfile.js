@@ -5,46 +5,52 @@ var gulp         = require('gulp'),
  * Gulp plugins.
  */
     gutil        = require('gulp-util'),
-    rename       = require('gulp-rename'),
     notify       = require('gulp-notify'),
+    rename       = require('gulp-rename'),
     scss         = require('gulp-sass'),
-    // graph        = require('gulp-sass-graph'),
-    imagemin     = require('gulp-imagemin'),
-    watch        = require('gulp-watch'),
+    browserSync  = require('browser-sync'),
     plumber      = require('gulp-plumber'),
-    jshint       = require('gulp-jshint'),
-    map          = require('map-stream'),
     uglify       = require('gulp-uglify'),
-    livereload   = require('gulp-livereload'),
-    lr           = require('tiny-lr'),
-    server       = lr(),
-    srcPath      = '',
-    templatePath = '',
-    //browserSync = require('browser-sync'),
-    //concat   = require('gulp-concat'),
+    filter       = require('gulp-filter'),
+    jshint       = require('gulp-jshint'),
+    imagemin     = require('gulp-imagemin'),
+    newer        = require('gulp-newer'),
+    concat       = require('gulp-concat'),
+    // map          = require('map-stream'),
+    reload       = browserSync.reload,
+    srcPath      = 'public/app/',
+    distPath     = 'public/app/',
+    // imgPath      = srcPath + 'views/modules/',
+    indexPath    = 'public/app/views/modules/',
+    templatePath = 'public/app/views/modules/',
+    concatCss    = 'views/allthe.css',
+    concatJs     = 'views/allthe.js'
     ;
 
 
 /*
  * Input, Output paths and environment variables.
  */
+    // Set proxy
+    var proxy = "";
+
     var input_paths = {
-        images:  [srcPath + 'src/img/**/*.jpg', srcPath + 'src/img/**/*.png', srcPath + 'src/img/**/*.gif', '!images/min{,/**}'],
-        scripts: [srcPath + 'src/js/**/*.js', '!scripts/min{,/**}'],
-        styles:  [srcPath + 'src/scss/**/*.scss', '!' + srcPath + 'src/scss/partials{,/**}']
-    }
+        images:  [srcPath + '**/*.jpg', srcPath + '**/*.png', srcPath + '**/*.gif', '!' + srcPath + '**/*.min.*', '!' + srcPath + '**/min/*.*' ],
+        scripts: [srcPath + '**/*.js', '!**/*.min.*', '!**/min/*.*'],
+        styles:  [srcPath + '**/*.scss', '!' + srcPath + 'partials{,/**}']
+    };
 
     var output_paths = {
-        images:  srcPath + 'dist/img',
-        scripts: srcPath + 'dist/js',
-        styles:  srcPath + 'dist/css'
-    }
+        images:  distPath,
+        scripts: distPath,
+        styles:  distPath
+    };
 
     var template_paths = {
-        html: [ templatePath + '**/*.html', templatePath + '**/*.twig']
-    }
+        twig: indexPath + '**/*.twig',
+        html: templatePath + '**/*.html'
+    };
 
-    //var DEV_URL = 'dev.gulp.com';
 
 
 /*
@@ -54,6 +60,8 @@ var gulp         = require('gulp'),
     // Sass
     var scss_options = {
         outputStyle: 'compressed', // variables - https://github.com/andrew/node-sass
+        // sourceComments: 'map',
+        // sourceMap: 'scss',
         errLogToConsole: false,
         onError: function(err) {
             notify().write(err);                    // Growl it.
@@ -63,131 +71,74 @@ var gulp         = require('gulp'),
     };
 
     // JS Uglify
-    var uglify_options = {}
-
-    // Notifications
-    var notify_options = {
-        message: "<%= file.relative %>"
+    var uglify_options = {
+        mangle: false
     };
 
-    // jsHint error notification
-    var custErr = map(function (file, cb, err) {
-        if (!file.jshint.success) {
-
-            notify().write(file.path);      // Growl it.
-            process.stdout.write('\x07');   // Beep boop the terminal.
-
-            // console.log(' ' +file.path + ': line ' + err.line + ', col ' + err.character + ', code ' + err.code + ', ' + err.reason);
-        }
-        cb(null, file);
-    });
 
 
 /*
- * Gulp Tasks.
+ * Tasks.
  */
-    gulp.task( 'styles', function() {
+    gulp.task('browser-sync', function() {
 
-        // Compile and minify scss.
-        return gulp.src( input_paths.styles )
-            .pipe( scss( scss_options ) )
-            // .pipe( rename( function ( path ) {
-            //  path.dirname = path.dirname.replace( path + '', '' );
-            // } ) )
-            .pipe( gulp.dest( output_paths.styles ) )
-            .pipe( notify( notify_options ) );
+        browserSync({
+            proxy: proxy
+        });
 
     });
 
-    gulp.task( 'scripts', function() {
 
-        // Minify JavaScript (except vendor scripts)
-        return gulp.src( input_paths.scripts )
-            .pipe( uglify( uglify_options ) )
-            .pipe( rename( function ( path ) {
-                //path.dirname = path.dirname.replace( path + '', '' );
-                path.basename += '.min';
-            }))
-            .pipe( gulp.dest( output_paths.scripts ) )
-            .pipe( notify( notify_options ) );
+    gulp.task('reload', function() {
+        browserSync.reload();
+    });
+
+
+    gulp.task('sass', function() {
+
+        return gulp.src(input_paths.styles)
+            .pipe(scss(scss_options))
+            .pipe(gulp.dest(output_paths.styles))
+            .pipe(reload({stream:true}));
 
     });
 
-    gulp.task( 'images', function() {
+    gulp.task('img', function() {
 
-        // Minify and copy all JavaScript (except vendor scripts)
         return gulp.src( input_paths.images )
             .pipe(imagemin())
             .pipe( rename( function ( path ) {
-                //path.dirname = path.dirname.replace( path + '', '' );
-                path.basename += '.min';
+                path.dirname += '/min';
             }))
             .pipe( gulp.dest( output_paths.images ) )
-            .pipe( notify( notify_options ) );
+            .pipe( notify({ message: 'Image minification complete!' }) );
 
     });
 
-    // gulp.task('browser-sync', function() {
-    //     browserSync.init([output_paths.styles + '**/*.css', output_paths.scripts + '**/*.min.js'], {
-    //      proxy: {
-    //          host: DEV_URL
-    //      }
-    //     });
-    // });
+    gulp.task('min-scripts', function() {
 
-
-
-
-    gulp.task('watch', ['styles', 'scripts', 'images'], function () {
-
-        server.listen(35729, function (err) {               // Livereload - requires browser plugin
-            if (err) { return console.log(err) };
-        });
-
-        // Watch HTML
-        gulp.src(template_paths.html, { read: false })      // Template source (html, php, twig, etc)
-            .pipe(watch())                                  // Watches for file changes
-            .pipe(livereload(server))                       // Reload the page
-            .pipe( notify( notify_options ) );              // Notify what file was changed
-
-        // Watch SCSS
-        //return watch({glob: input_paths.styles, emitOnGlob: false})
-        gulp.src(input_paths.styles, { read: false })
-            .pipe(plumber())                                // Keeps pipes working after error event
-            .pipe(watch())                              // Watches for file changes
-            .pipe(scss( scss_options ))                     // SCSS compiler
-            .pipe( gulp.dest( output_paths.styles ) )       // Output destination
-            .pipe(livereload(server))                       // Reload the page
-            .pipe( notify( notify_options ) );              // Notify what file was changed
-
-        // Watch JS
-        gulp.src(input_paths.scripts)
-            //.pipe(plumber())                              // Keeps pipes working after error event // Not needed here as pipes flow freely
-            .pipe(watch())                                  // Watchs for files changed
-            .pipe(jshint())                                 // Check JS for errors
-            .pipe(jshint.reporter('jshint-stylish'))        // Make any errors report all stylish like
-            .pipe(custErr)                                  // Custom notifications for errors (terminal beep and notification)
-            .pipe(uglify(uglify_options))                   // Minimize the JS files
-            .pipe( rename( function ( path ) {              // Add .min extention
-                path.basename += '.min';
-            }))
-            .pipe(gulp.dest(output_paths.scripts))          // Output destination
-            .pipe(livereload(server))                       // Reload the page
-            .pipe(notify( notify_options ));                // Notify what was changed
-
-        // Minimize IMGs
-        gulp.src( input_paths.images )
-            .pipe(imagemin())                               // Minify images
-            .pipe( rename( function ( path ) {              // Add .min to minified images
-                path.basename += '.min';
-            }))
-            .pipe( gulp.dest( output_paths.images ) )       // Output destination
-            .pipe( notify( notify_options ) );              // Notify what was changed
+        return gulp.src(input_paths.scripts)
+            .pipe(concat('allthe.js'))
+            .pipe(gulp.dest('public/'))
+            .pipe(uglify( uglify_options ))
+            .pipe(gulp.dest('public/'));
 
     });
 
-    // Run this to compile
-    gulp.task( 'compile', ['scripts', 'styles', 'images'] );
+    gulp.task('min-styles', function() {
 
-    // The default task (called when you run `gulp` from cli)
-    gulp.task( 'default', [] );
+        return gulp.src(input_paths.styles)
+            .pipe(scss(scss_options))
+            .pipe(concat('allthe.css'))
+            .pipe(gulp.dest('public/'));
+
+    });
+
+
+    gulp.task('default', ['sass', 'browser-sync'], function() {
+        gulp.watch(input_paths.styles, ['sass', 'build']);
+        gulp.watch([template_paths.twig, template_paths.html], ['reload']);
+        gulp.watch(input_paths.scripts, ['build']);
+    });
+
+    gulp.task('build', ['min-styles', 'min-scripts']);
