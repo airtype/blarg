@@ -20,6 +20,7 @@ var gulp         = require('gulp'),
     reload       = browserSync.reload,
     srcPath      = 'public/app/',
     distPath     = 'public/app/',
+    buildPath    = 'public/',
     // imgPath      = srcPath + 'views/modules/',
     indexPath    = 'public/app/views/modules/',
     templatePath = 'public/app/views/modules/',
@@ -119,9 +120,9 @@ var gulp         = require('gulp'),
 
         return gulp.src(input_paths.scripts)
             .pipe(concat('allthe.js'))
-            .pipe(gulp.dest('public/'))
+            .pipe(gulp.dest(buildPath))
             .pipe(uglify( uglify_options ))
-            .pipe(gulp.dest('public/'));
+            .pipe(gulp.dest(buildPath));
 
     });
 
@@ -130,7 +131,7 @@ var gulp         = require('gulp'),
         return gulp.src(input_paths.styles)
             .pipe(scss(scss_options))
             .pipe(concat('allthe.css'))
-            .pipe(gulp.dest('public/'));
+            .pipe(gulp.dest(buildPath));
 
     });
 
