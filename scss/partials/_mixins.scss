@@ -41,6 +41,8 @@
                                     ex: @include columns($count, $gap);
         -   dashed-border       -arguments: $dashlength, $spacelength, $borderwidth, $color, $position: top
                                     ex: @include dashed-border($dashlength, $spacelength, $borderwidth, $color, $position: top);
+        -   vertical-align      -arguments: null
+                                    ex: @include vertical-align;
 
 ********************************************************/
 
@@ -328,6 +330,21 @@
         background-repeat: repeat-x;
     }
 
+
+/*******************************************************************************
+ ** Vertical Align                                                            **
+ ** @include vertical-align;                                                  **
+ **                                                                           **
+ ** http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/  **
+ *******************************************************************************/
+
+    @mixin vertical-align {
+        position: relative;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+                transform: translateY(-50%);
+    }
 
 
 

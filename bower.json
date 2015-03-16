@@ -1,12 +1,11 @@
 {
     "name": "blarg",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "homepage": "https://github.com/airtypestudio/blarg",
     "authors": [
         "Airtype Studio <@airtype>",
         "Wes Rice <@wesrice>",
-        "Shane Howell <@shane_howell>",
-        "Matt Helm <@mtthlm>"
+        "Shane Howell <@shane_howell>"
     ],
     "description": "Simple SCSS Framework",
     "keywords": [
