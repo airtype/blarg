@@ -16,14 +16,15 @@ var gulp         = require('gulp'),
     imagemin     = require('gulp-imagemin'),
     newer        = require('gulp-newer'),
     concat       = require('gulp-concat'),
+    autoprefixer = require('gulp-autoprefixer'),
     reload       = browserSync.reload,
-    srcPath      = 'blarg-starter-scss/',
-    distPath     = 'blarg-starter-scss/',
-    buildPath    = 'blarg-starter-scss/',
-    indexPath    = 'path-to-index-file',
-    templatePath = 'path-to-template-file-folder',
-    concatCss    = 'blarg-starter-scss/allthe.css',
-    concatJs     = 'blarg-starter-scss/allthe.js'
+    srcPath      = 'assets/',
+    distPath     = 'assets/',
+    buildPath    = 'assets/',
+    indexPath    = '/',
+    templatePath = '/',
+    concatCss    = 'assets/allthe.css',
+    concatJs     = 'assets/allthe.js'
     ;
 
 
@@ -58,7 +59,7 @@ var gulp         = require('gulp'),
 
     // Sass
     var scss_options = {
-        outputStyle: 'compressed', // variables - https://github.com/andrew/node-sass
+        outputStyle: 'nested', // variables - https://github.com/andrew/node-sass
         errLogToConsole: false,
         onError: function(err) {
             notify().write(err);                    // Growl it.
