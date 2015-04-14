@@ -16,16 +16,14 @@ var gulp         = require('gulp'),
     imagemin     = require('gulp-imagemin'),
     newer        = require('gulp-newer'),
     concat       = require('gulp-concat'),
-    // map          = require('map-stream'),
     reload       = browserSync.reload,
-    srcPath      = 'public/app/',
-    distPath     = 'public/app/',
-    buildPath    = 'public/',
-    // imgPath      = srcPath + 'views/modules/',
-    indexPath    = 'public/app/views/modules/',
-    templatePath = 'public/app/views/modules/',
-    concatCss    = 'views/allthe.css',
-    concatJs     = 'views/allthe.js'
+    srcPath      = 'blarg-starter-scss/',
+    distPath     = 'blarg-starter-scss/',
+    buildPath    = 'blarg-starter-scss/',
+    indexPath    = 'path-to-index-file',
+    templatePath = 'path-to-template-file-folder',
+    concatCss    = 'blarg-starter-scss/allthe.css',
+    concatJs     = 'blarg-starter-scss/allthe.js'
     ;
 
 
@@ -61,8 +59,6 @@ var gulp         = require('gulp'),
     // Sass
     var scss_options = {
         outputStyle: 'compressed', // variables - https://github.com/andrew/node-sass
-        // sourceComments: 'map',
-        // sourceMap: 'scss',
         errLogToConsole: false,
         onError: function(err) {
             notify().write(err);                    // Growl it.
@@ -99,6 +95,12 @@ var gulp         = require('gulp'),
 
         return gulp.src(input_paths.styles)
             .pipe(scss(scss_options))
+            .pipe(
+                autoprefixer({
+                    browsers: ['last 2 versions', 'Explorer >= 9'],
+                        cascade: false
+                })
+            )
             .pipe(gulp.dest(output_paths.styles))
             .pipe(reload({stream:true}));
 
