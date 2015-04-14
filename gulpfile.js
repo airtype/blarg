@@ -16,6 +16,7 @@ var gulp         = require('gulp'),
     imagemin     = require('gulp-imagemin'),
     newer        = require('gulp-newer'),
     concat       = require('gulp-concat'),
+    autoprefixer = require('gulp-autoprefixer'),
     reload       = browserSync.reload,
     srcPath      = 'blarg-starter-scss/',
     distPath     = 'blarg-starter-scss/',
@@ -98,7 +99,7 @@ var gulp         = require('gulp'),
             .pipe(
                 autoprefixer({
                     browsers: ['last 2 versions', 'Explorer >= 9'],
-                        cascade: false
+                    cascade: false
                 })
             )
             .pipe(gulp.dest(output_paths.styles))
